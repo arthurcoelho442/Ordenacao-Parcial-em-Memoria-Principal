@@ -60,11 +60,82 @@ ordenacao* insertionSort(){
 ordenacao* shellSort(){
     return NULL;//alterar depois
 }
-ordenacao* quickSort(){
-    return NULL;//alterar depois
+ordenacao* quickSort(int *dados, int esq, int dir, ordenacao *quick){
+    int aux_esq = esq;
+    int aux_dir = dir;
+    int central = dados[(esq + dir) / 2];
+     
+    while(aux_esq <= aux_dir) {
+        while(dados[aux_esq] < central && aux_esq < dir) {
+            aux_esq++;
+            quick->comp+=1;
+        }
+        while(dados[aux_dir] > central && aux_dir > esq) {
+            aux_dir--;
+            quick->comp+=1;
+        }
+        if(aux_esq <= aux_dir) {
+            //TROCA DE POSIÇÃO
+            int aux_troca = dados[aux_esq];
+            dados[aux_esq] = dados[aux_dir];
+            dados[aux_dir] = aux_troca;
+            aux_esq++;
+            aux_dir--;
+            quick->trocas +=1;
+        }
+    }     
+    if(aux_dir > esq) {
+        quickSort(dados, esq, aux_dir, quick);
+    }
+    if(aux_esq < dir) {
+        quickSort(dados, aux_esq, dir, quick);
+    }
+    
+    return quick;
 }
-ordenacao* heapSort(){
-    return NULL;//alterar depois
+
+void criaHeap(int *dados, int inicio, int fim, ordenacao *heap){
+    int aux = dados[inicio];    //pai
+    int filho = 2*inicio +1;    //filho
+    
+    while(filho <= fim){
+        if(filho < fim && (filho+1) < fim){
+            if(dados[filho] < dados[filho+1]){      //pai tem 2 filhos ? se sim, qual o maior
+                filho++;
+                heap->comp +=1;
+            }
+        }
+        if(aux < dados[filho]){   //troca o filho com o pai se o filho for maior
+            dados[inicio] = dados[filho];
+            inicio = filho;
+            filho = 2*inicio +1;
+            heap->trocas +=1;
+            heap->comp +=1;
+        }
+        else{
+            filho = fim +1;
+        }
+    }
+    dados[inicio] = aux;        //pai troca com filho mais profundo mais a direita
+    heap->trocas +=1;
+}
+
+ordenacao* heapSort(int qtd, int *dados, ordenacao *heap){
+    clock_t  init = clock();
+
+    for(int i = (qtd-1)/2; i >= 0; i--){
+        criaHeap(dados, i, qtd-1, heap);
+    }
+    for(int i = qtd-1; i>= 1;i --){  
+        int aux = dados[0];
+        dados[0] = dados[i];
+        dados[i] = aux;
+        heap->trocas +=1;
+        criaHeap(dados, 0, i, heap);
+    }
+    clock_t fim = clock();
+    heap->tempo = (double)(fim - init)/CLOCKS_PER_SEC;
+    return heap;
 }
 
 void insereNaLista(Lista *l, ordenacao *e){
@@ -83,6 +154,17 @@ void excluiLista(Lista *l){
         free(p);
     }
     free(l);     
+}
+
+ordenacao* cria(char *nome){
+    ordenacao* x = (ordenacao*) malloc(sizeof(ordenacao)); //FAZER UMA FUNCAO PARA UTILIZAR EM TODOS OS ALGORITMOS
+    x->algoritmo = (char*) malloc(sizeof(char)*100); //mudar
+    strcpy(x->algoritmo, nome);
+    x->comp = 0;
+    x->trocas = 0;
+    x->tempo = 0;
+    x->prox = NULL;
+    return x;
 }
 
 int main(int argc, char** argv) {
@@ -162,13 +244,18 @@ int main(int argc, char** argv) {
         case 'q': //Executa método de ordenação por quicksort
             for(int i=0; i<qtd; i++)
                 dadosAux[i] = dados[i];
-            alg = quickSort();
+            ordenacao *quick = cria("quick");
+            clock_t init = clock();                                        //-----------------------------------------------------
+            alg = quickSort(dadosAux, 0, qtd-1, quick);
+            clock_t fim = clock();
+            quick->tempo = (double)(fim - init)/CLOCKS_PER_SEC;
             insereNaLista(lista, alg); //insere na lista
             break;
         case 'h': //Executa método de ordenação por heapsort
             for(int i=0; i<qtd; i++)
                 dadosAux[i] = dados[i];
-            alg = heapSort();
+            ordenacao *heap = cria("heap");
+            alg = heapSort(qtd, dadosAux, heap);
             insereNaLista(lista, alg); //insere na lista
             break;
         default: //Imprime o codigo de erro do opt
