@@ -102,8 +102,8 @@ ordenacao* shellSort(int qtd, int *dados){
         for (int i = h; i < qtd; i++) {
             aux = dados[i];
             // efetua comparações entre elementos com distância h:
-            for(j = i;dados[j-h] > aux && !(j < h); j -= h){
-                comp++;
+            comp++;
+            for(j = i;dados[j-h] > aux && !(j < h); j -= h, comp++){
                 dados[j] = dados[j-h];
                 trocas++;
             }
