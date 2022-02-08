@@ -52,10 +52,38 @@ ordenacao* selectionSort(int qtd, int *dados){
     selec->tempo = tempo;
     selec->prox = NULL;
     
-    return selec;//alterar depois
+    return selec;
 }
-ordenacao* insertionSort(){
-    return NULL;//alterar depois
+ordenacao* insertionSort(int qtd, int *dados){
+    ordenacao* insert = (ordenacao*) malloc(sizeof(ordenacao));
+    int comp = 0;
+    int trocas = 0;
+    clock_t init = clock();
+    for(int i=1, j; i<qtd; i++){
+        int c = dados[i];
+        for(j= i-1; j>= 0; j--){
+            comp++;
+            if(dados[j] > c){
+                trocas++;
+                dados[j+1] = dados[j];
+            }else
+                break;
+        }
+        dados[j+1] = c;
+    }
+    
+    clock_t fim = clock();
+    double tempo = (double)(fim - init)/CLOCKS_PER_SEC;
+ 
+    insert->algoritmo = (char*) malloc(sizeof(char)*100);
+    strcpy(insert->algoritmo, "insercao");
+    
+    insert->comp = comp;
+    insert->trocas = trocas;
+    insert->tempo = tempo;
+    insert->prox = NULL;
+    
+    return insert;
 }
 ordenacao* shellSort(){
     return NULL;//alterar depois
@@ -150,7 +178,7 @@ int main(int argc, char** argv) {
         case 'i': //Executa método de ordenação por inserção
             for(int i=0; i<qtd; i++)
                 dadosAux[i] = dados[i];
-            alg = insertionSort();
+            alg = insertionSort(qtd, dadosAux);
             insereNaLista(lista, alg); //insere na lista
             break;
         case 'e': //Executa método de ordenação por shellsort
