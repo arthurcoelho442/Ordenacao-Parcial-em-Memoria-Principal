@@ -96,19 +96,22 @@ ordenacao* shellSort(int qtd, int *dados){
     int aux;
     
     for (h = 1; h < qtd; h = 3 * h + 1); // calcula o h inicial.
-    
+
     while (h > 0) {
         h = (h - 1) / 3; // atualiza o valor de h. 
         for (int i = h; i < qtd; i++) {
             aux = dados[i];
             // efetua comparações entre elementos com distância h:
             comp++;
-            for(j = i;dados[j-h] > aux && !(j < h); j -= h, comp++){
-                dados[j] = dados[j-h];
+            for(j = i-h;aux < dados[j]; comp++){
+                dados[j+h] = dados[j];
                 trocas++;
+                
+                j -= h;
+                if(j < 0)
+                    break;                  
             }
-            trocas++;
-            dados[j] = aux;
+            dados[j+h] = aux;
         }
     }
     
