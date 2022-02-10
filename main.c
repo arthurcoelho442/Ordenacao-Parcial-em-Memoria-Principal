@@ -23,18 +23,19 @@ typedef struct lista{
 }Lista;
 
 ordenacao* selectionSort(int qtd, int *dados){
-    ordenacao* selec = (ordenacao*) malloc(sizeof(ordenacao));
-    int comp = 0;
-    int trocas = 0;
-    clock_t init = clock();
+    ordenacao* selec = (ordenacao*) malloc(sizeof(ordenacao));//Aloca dinamicamente o algoritmo
+    int comp = 0; //refere o numero de comparações feitas
+    int trocas = 0;//referece ao numero de trocas executadas
+    clock_t init = clock();//pega o tempo atual 
     
     for(int i=0; i<qtd; i++){
-        int min_id = i;
-        for(int j=i; j<qtd; j++)
-            if(dados[j] < dados[min_id])
-                min_id = j;
-        comp++;
-        if(dados[i] > dados[min_id]){
+        int min_id = i;//armazena o indice do valor minimo
+        for(int j=i; j<qtd; j++){//Anda pela sublista
+            comp++;
+            if(dados[j] < dados[min_id])//Verifica se um dos dados da sublista e menor do que o dado do indice min_id
+                min_id = j;//troca o indice do valor minimo
+        }
+        if(dados[i] > dados[min_id]){//Faz a troca dos dados do indice min_id da sublista com o dado na posição i
             trocas++;
             int aux = dados[i];
             dados[i] = dados[min_id];
@@ -42,24 +43,92 @@ ordenacao* selectionSort(int qtd, int *dados){
         }
     }
     
-    clock_t fim = clock();
-    double tempo = (double)(fim - init)/CLOCKS_PER_SEC;
+    clock_t fim = clock();//pega o tempo no final da execução do algoritmo
+    double tempo = (double)(fim - init)/CLOCKS_PER_SEC;//calcula o tempo gasto para a execução do algoritmo
  
-    selec->algoritmo = (char*) malloc(sizeof(char)*100);
-    strcpy(selec->algoritmo, "selecao");
-    selec->comp = comp;
-    selec->trocas = trocas;
-    selec->tempo = tempo;
+    selec->algoritmo = (char*) malloc(sizeof(char)*100);//aloca dinamicamente espaço na memoria para o nome do algoritmo utilizado
+    strcpy(selec->algoritmo, "selecao");//Armazena o nome do algoritmo utilizado nos dados algoritmo
+    selec->comp = comp;//Armazena a quandidade de comparações feita pelo algoritmo nos dados algoritmo
+    selec->trocas = trocas;//Armazena a quandidade de trocas feita pelo algoritmo nos dados algoritmo
+    selec->tempo = tempo;//Armazena a tempo gasto pelo algoritmo nos dados algoritmo
     selec->prox = NULL;
     
-    return selec;//alterar depois
+    return selec;
 }
-ordenacao* insertionSort(){
-    return NULL;//alterar depois
+ordenacao* insertionSort(int qtd, int *dados){
+    ordenacao* insert = (ordenacao*) malloc(sizeof(ordenacao));//Aloca dinamicamente o algoritmo
+    int comp = 0; //refere o numero de comparações feitas
+    int trocas = 0;//referece ao numero de trocas executadas
+    clock_t init = clock();//pega o tempo atual 
+    
+    for(int i=1, j; i<qtd; i++){
+        int c = dados[i];
+        for(j= i-1; j>= 0; j--){
+            comp++;
+            if(dados[j] > c){//Compara se um elemento da direita e maior que o da sublista a esquerda
+                trocas++;
+                dados[j+1] = dados[j];
+            }else
+                break;
+        }
+        dados[j+1] = c;
+    }
+    
+    clock_t fim = clock();//pega o tempo no final da execução do algoritmo
+    double tempo = (double)(fim - init)/CLOCKS_PER_SEC;//calcula o tempo gasto para a execução do algoritmo
+ 
+    insert->algoritmo = (char*) malloc(sizeof(char)*100);//aloca dinamicamente espaço na memoria para o nome do algoritmo utilizado
+    strcpy(insert->algoritmo, "insercao");//Armazena o nome do algoritmo utilizado nos dados algoritmo
+    insert->comp = comp;//Armazena a quandidade de comparações feita pelo algoritmo nos dados algoritmo
+    insert->trocas = trocas;//Armazena a quandidade de trocas feita pelo algoritmo nos dados algoritmo
+    insert->tempo = tempo;//Armazena a tempo gasto pelo algoritmo nos dados algoritmo
+    insert->prox = NULL;
+    
+    return insert;
 }
-ordenacao* shellSort(){
-    return NULL;//alterar depois
+ordenacao* shellSort(int qtd, int *dados){
+    ordenacao* shell = (ordenacao*) malloc(sizeof(ordenacao));//Aloca dinamicamente o algoritmo
+    int comp = 0; //refere o numero de comparações feitas
+    int trocas = 0;//referece ao numero de trocas executadas
+    clock_t init = clock();//pega o tempo atual 
+    
+    int j, h;
+    int aux;
+    
+    h = qtd;// h inicial.
+    
+    while (h > 1) {
+        h /= 2;// atualiza o valor de h.
+        for (int i = h; i < qtd; i++) {
+            aux = dados[i];
+            // efetua comparações entre elementos com distância h:
+            j = i-h;
+            while(1){
+                comp++;
+                if(!(aux < dados[j]))break;//compara dois valores com distancia h
+                
+                dados[j+h] = dados[j];//Troca os valores
+                trocas++;
+                
+                j -= h;
+                if(j < 0) break;
+            }
+            dados[j+h] = aux;
+        }
+    }
+    
+    clock_t fim = clock();//pega o tempo no final da execução do algoritmo
+    double tempo = (double)(fim - init)/CLOCKS_PER_SEC;//calcula o tempo gasto para a execução do algoritmo
+ 
+    shell->algoritmo = (char*) malloc(sizeof(char)*100);//aloca dinamicamente espaço na memoria para o nome do algoritmo utilizado
+    strcpy(shell->algoritmo, "Concha");//Armazena o nome do algoritmo utilizado nos dados algoritmo
+    shell->comp = comp;//Armazena a quandidade de comparações feita pelo algoritmo nos dados algoritmo
+    shell->trocas = trocas;//Armazena a quandidade de trocas feita pelo algoritmo nos dados algoritmo
+    shell->tempo = tempo;//Armazena a tempo gasto pelo algoritmo nos dados algoritmo
+    shell->prox = NULL;
+    return shell;
 }
+
 ordenacao* quickSort(){
     return NULL;//alterar depois
 }
@@ -67,22 +136,26 @@ ordenacao* heapSort(){
     return NULL;//alterar depois
 }
 
+//Insere os dados de uma ordenação na lista
 void insereNaLista(Lista *l, ordenacao *e){
+    //Entra se a lista esta vazia e adiciona os dados
     if(l->ini == NULL){
         l->ini = e;
         l->fim = e;
-    }else{
+    }else{//Entra se a lista já possui elementos e adiciona na ultima posição
         l->fim->prox = e; 
         l->fim = e; 
     }
     l->tam++;
 }
+//Libera o espaço da alocação dinamica 
 void excluiLista(Lista *l){
+    //Anda pela fila leberando algoritmo por algoritmo
     for(ordenacao *p = l->ini; p != NULL; p = p->prox){
-        free(p->algoritmo);
-        free(p);
+        free(p->algoritmo);//Libera o nome do algoritmo utilizado
+        free(p);//Libera os dados do algoritmo
     }
-    free(l);     
+    free(l);//Libera a lista
 }
 
 int main(int argc, char** argv) {
@@ -150,13 +223,13 @@ int main(int argc, char** argv) {
         case 'i': //Executa método de ordenação por inserção
             for(int i=0; i<qtd; i++)
                 dadosAux[i] = dados[i];
-            alg = insertionSort();
+            alg = insertionSort(qtd, dadosAux);
             insereNaLista(lista, alg); //insere na lista
             break;
         case 'e': //Executa método de ordenação por shellsort
             for(int i=0; i<qtd; i++)
                 dadosAux[i] = dados[i];
-            alg = shellSort();
+            alg = shellSort(qtd, dadosAux);
             insereNaLista(lista, alg); //insere na lista
             break;
         case 'q': //Executa método de ordenação por quicksort
