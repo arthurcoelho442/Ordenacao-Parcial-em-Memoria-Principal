@@ -107,24 +107,24 @@ ordenacao* quickSort(int *dados, int esq, int dir, ordenacao *quick){
     int central = dados[(esq + dir) / 2];
      
     while(aux_esq <= aux_dir) {
-        while(dados[aux_esq] < central && aux_esq < dir) {
+        while(dados[aux_esq] > central && aux_esq <= dir) {
             aux_esq++;
             quick->comp++;
         }
-        while(dados[aux_dir] > central && aux_dir > esq) {
+        while(dados[aux_dir] < central && aux_dir >= esq) {
             aux_dir--;
             quick->comp++;
         }
-        if(aux_esq <= aux_dir) {
+        if(aux_esq < aux_dir && dados[aux_esq] < dados[aux_dir]) {
             //TROCA DE POSIÇÃO
+            printf("%d %d %d %d %d\n", aux_esq, esq, aux_dir, dir, central);
             int aux_troca = dados[aux_esq];
             dados[aux_esq] = dados[aux_dir];
             dados[aux_dir] = aux_troca;
-            aux_esq++;
-            aux_dir--;
             quick->trocas++;
         }
-        quick->comp++;
+        aux_esq++;
+        aux_dir--;
     }     
     if(aux_dir > esq) {
         quickSort(dados, esq, aux_dir, quick);

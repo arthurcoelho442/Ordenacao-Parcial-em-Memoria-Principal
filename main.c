@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
     //Impressão////////////
     for(int i = 0; i < 3; i++){
         if(impressao[i] == Maiores){//Imprime em tela os T maiores elementos
-            for(int i = (qtd - 1); i >= (qtd - atoi(argv[2])); i--)
+            for(int i = 0; i < atoi(argv[2]); i++)
                 printf("%d\n", dadosAux[i]);
         }else if(impressao[i] == Estatisticas){//Imprime as estatísticas
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p)){
