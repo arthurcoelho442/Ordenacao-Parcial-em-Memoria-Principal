@@ -22,9 +22,12 @@ void imprimir(int *impressao, int t, char* nomeArq, int *dados, int qtd, Lista* 
 
 int main(int argc, char** argv) {
     Lista *lista = (Lista*) malloc(sizeof (lista)); //Lista com todas as ordenações executadas
-    //Manipulação do arquivo
     FILE* entrada;//Arquivo de entrada para o sistema
     FILE* saida;//Arquivo de saida
+    int opt;
+    int impressao[3] = {0, 0, 0};
+    ordenacao *alg; //algoritimo de ordenação
+    
     //Abre o arquivo de Entrada e o de Saida
     entrada = fopen(argv[3], "r+");
     saida = fopen("saida.txt", "a+");
@@ -36,21 +39,16 @@ int main(int argc, char** argv) {
     }
     ///////////////////////////////////////
 
-
     //Tratamento do dados do arquivo //////////
     int qtd; //quantidade de itens
     fscanf(entrada, "%d", &qtd);
-    int dados[qtd];//todos os dados do arquivo
+    int dados[qtd], dadosAux[qtd];//todos os dados do arquivo
     for(int i = 0; i < qtd; i++)
         fscanf(entrada, "%d", &dados[i]);
     ///////////////////////////////////////////
 
     //Analise do [-123iseqha] para definir a execução do programa
-    int opt;
-    int impressao[3] = {0, 0, 0};
-    int dadosAux[qtd];
-    ordenacao *alg; //algoritimo de ordenação
-    while ((opt = getopt(argc, argv, "asieqh123")) != -1) {
+    while ((opt = getopt(argc, argv, "asieqh123")) != -1)
         switch (opt) {
             case '1': //Adiciona a lista para imprimir em tela os T maiores elementos
                 for(int i = 0; i < 3; i++)
@@ -88,12 +86,12 @@ int main(int argc, char** argv) {
                             alg = shellSort(qtd, dadosAux);
                             break;
                         case 3:
-                            ordenacao *quick = cria("quick");
+                            alg = cria("quick");
                             clock_t init = clock();                             //pega o tempo atual                                        
-                            alg = quickSort(dadosAux, 0, qtd-1, quick);
+                            alg = quickSort(dadosAux, 0, qtd-1, alg);
                             clock_t fim = clock();                              //pega tempo final da eecução do algoritmo
                             double tempo = (double)(fim - init)/CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
-                            insereTempo(quick, tempo);
+                            insereTempo(alg, tempo);
                             break;
                         case 4:
                             alg = heapSort(qtd, dadosAux);
@@ -139,7 +137,6 @@ int main(int argc, char** argv) {
             default: //Imprime o codigo de erro do opt
                 printf("getopt retornou com character de codigo 0%o\n", opt);
         }
-    }
     //////////////////////////////////////////////////////////
     //Impressão////////////
     imprimir(impressao, atoi(argv[2]), argv[3], dadosAux, qtd, lista, saida);
@@ -164,8 +161,8 @@ void insereNaLista(Lista *l, ordenacao *e) {
         l->fim = e;
     }
 }
-//Libera o espaço da alocação dinamica 
 
+//Libera o espaço da alocação dinamica 
 void excluiLista(Lista *l) {
     //Anda pela fila leberando algoritmo por algoritmo
     for (ordenacao *p = l->ini; p != NULL;){

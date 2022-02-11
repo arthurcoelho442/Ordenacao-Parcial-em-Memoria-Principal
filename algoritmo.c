@@ -5,7 +5,7 @@
 #include <time.h>
 #include "algoritmo.h"
 
-ordenacao* cria(char *nome){
+ordenacao*          cria(char *nome){
     ordenacao* x = (ordenacao*) malloc(sizeof(ordenacao)); //FAZER UMA FUNCAO PARA UTILIZAR EM TODOS OS ALGORITMOS
     x->algoritmo = (char*) malloc(sizeof(char)*100); 
     strcpy(x->algoritmo, nome);
@@ -15,8 +15,32 @@ ordenacao* cria(char *nome){
     x->prox = NULL;
     return x;
 }
+void                criaHeap(int *dados, int inicio, int fim, ordenacao *heap) {
+    int aux = dados[inicio]; //pai
+    int filho = 2 * inicio + 1; //filho
 
-ordenacao* selectionSort(int qtd, int *dados) {
+    while (filho <= fim) {
+        if (filho < fim && (filho + 1) < fim) {
+            if (dados[filho] < dados[filho + 1]) { //pai tem 2 filhos ? se sim, qual o maior
+                filho++;
+                heap->comp++;
+            }
+        }
+        if (aux < dados[filho]) { //troca o filho com o pai se o filho for maior
+            dados[inicio] = dados[filho];
+            inicio = filho;
+            filho = 2 * inicio + 1;
+            heap->trocas++;
+            heap->comp++;
+        } else {
+            filho = fim + 1;
+        }
+    }
+    dados[inicio] = aux; //pai troca com filho mais profundo mais a direita
+    heap->trocas++;
+}
+
+ordenacao*          selectionSort(int qtd, int *dados) {
     ordenacao* selec = cria("selecao");
     clock_t init = clock(); //pega o tempo atual 
 
@@ -39,8 +63,7 @@ ordenacao* selectionSort(int qtd, int *dados) {
     selec->tempo = (double) (fim - init) / CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
     return selec;
 }
-
-ordenacao* insertionSort(int qtd, int *dados) {
+ordenacao*          insertionSort(int qtd, int *dados) {
     ordenacao* insert = cria("insercao");
     clock_t init = clock(); //pega o tempo atual 
 
@@ -61,7 +84,7 @@ ordenacao* insertionSort(int qtd, int *dados) {
     insert->tempo = (double) (fim - init) / CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
     return insert;
 }
-ordenacao* shellSort(int qtd, int *dados) {
+ordenacao*          shellSort(int qtd, int *dados) {
     ordenacao* shell = cria("concha");
     clock_t init = clock(); //pega o tempo atual 
 
@@ -91,8 +114,7 @@ ordenacao* shellSort(int qtd, int *dados) {
     shell->tempo = (double) (fim - init) / CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
     return shell;
 }
-
-ordenacao* quickSort(int *dados, int esq, int dir, ordenacao* quick) {
+ordenacao*          quickSort(int *dados, int esq, int dir, ordenacao* quick) {
     int aux_esq = esq;
     int aux_dir = dir;
     int central = dados[(esq + dir) / 2];
@@ -123,33 +145,7 @@ ordenacao* quickSort(int *dados, int esq, int dir, ordenacao* quick) {
         quickSort(dados, aux_esq, dir, quick);
     return quick;
 }
-
-void criaHeap(int *dados, int inicio, int fim, ordenacao *heap) {
-    int aux = dados[inicio]; //pai
-    int filho = 2 * inicio + 1; //filho
-
-    while (filho <= fim) {
-        if (filho < fim && (filho + 1) < fim) {
-            if (dados[filho] < dados[filho + 1]) { //pai tem 2 filhos ? se sim, qual o maior
-                filho++;
-                heap->comp++;
-            }
-        }
-        if (aux < dados[filho]) { //troca o filho com o pai se o filho for maior
-            dados[inicio] = dados[filho];
-            inicio = filho;
-            filho = 2 * inicio + 1;
-            heap->trocas++;
-            heap->comp++;
-        } else {
-            filho = fim + 1;
-        }
-    }
-    dados[inicio] = aux; //pai troca com filho mais profundo mais a direita
-    heap->trocas++;
-}
-
-ordenacao* heapSort(int qtd, int *dados) {
+ordenacao*          heapSort(int qtd, int *dados) {
     ordenacao* heap = cria("heap");
     clock_t init = clock();//pega o tempo atual 
 
@@ -169,43 +165,36 @@ ordenacao* heapSort(int qtd, int *dados) {
     return heap;
 }
 
-void insereProx(ordenacao *x, ordenacao *novo){
+void                insereProx(ordenacao *x, ordenacao *novo){
     x->prox = novo;
 }
-
-void insereTempo(ordenacao *x, double tempo){
+void                insereTempo(ordenacao *x, double tempo){
     x->tempo = tempo;
 }
-
-double retornaTempo(ordenacao *x){
-    return x->tempo;
-}
-
-void insereTroca(ordenacao *x, unsigned long int trocas){
+void                insereTroca(ordenacao *x, unsigned long int trocas){
     x->trocas = trocas;
 }
-
-unsigned long int retornaTroca(ordenacao *x){
-    return x->trocas;
-}
-
-void insereComp(ordenacao *x, unsigned long int comparacao){
+void                insereComp(ordenacao *x, unsigned long int comparacao){
     x->comp = comparacao;
 }
 
-unsigned long int retornaComp(ordenacao *x){
+double              retornaTempo(ordenacao *x){
+    return x->tempo;
+}
+unsigned long int   retornaTroca(ordenacao *x){
+    return x->trocas;
+}
+unsigned long int   retornaComp(ordenacao *x){
     return x->comp;
 }
-
-char* retornaNome(ordenacao *x){
+char*               retornaNome(ordenacao *x){
     return x->algoritmo;
 }
-
-ordenacao* retornaProx(ordenacao *x){
+ordenacao*          retornaProx(ordenacao *x){
     return x->prox;
 }
 
-void libera(ordenacao* x){
+void                libera(ordenacao* x){
     free(x->algoritmo); //Libera o nome do algoritmo utilizado
     free(x); //Libera os dados do algoritmo
 }
