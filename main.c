@@ -38,17 +38,17 @@ ordenacao* selectionSort(int qtd, int *dados) {
     clock_t init = clock(); //pega o tempo atual 
 
     for (int i = 0; i < qtd; i++) {
-        int min_id = i; //armazena o indice do valor minimo
+        int max_id = i; //armazena o indice do valor minimo
         for (int j = i; j < qtd; j++) {//Anda pela sublista
             selec->comp++;
-            if (dados[j] < dados[min_id])//Verifica se um dos dados da sublista e menor do que o dado do indice min_id
-                min_id = j; //troca o indice do valor minimo
+            if (dados[j] > dados[max_id])//Verifica se um dos dados da sublista e menor do que o dado do indice min_id
+                max_id = j; //troca o indice do valor minimo
         }
-        if (dados[i] > dados[min_id]) {//Faz a troca dos dados do indice min_id da sublista com o dado na posição i
+        if (dados[i] < dados[max_id]) {//Faz a troca dos dados do indice min_id da sublista com o dado na posição i
             selec->trocas++;
             int aux = dados[i];
-            dados[i] = dados[min_id];
-            dados[min_id] = aux;
+            dados[i] = dados[max_id];
+            dados[max_id] = aux;
         }
     }
 
@@ -65,7 +65,7 @@ ordenacao* insertionSort(int qtd, int *dados) {
         int c = dados[i]; //5
         for (j = i - 1; j >= 0; j--) {
             insert->comp++;
-            if (dados[j] > c) {//Compara se um elemento da direita e maior que o da sublista a esquerda
+            if (dados[j] < c) {//Compara se um elemento da direita e maior que o da sublista a esquerda
                 insert->trocas++;
                 dados[j + 1] = dados[j];
             } else
@@ -93,7 +93,7 @@ ordenacao* shellSort(int qtd, int *dados) {
             j = i - h;
             while (1) {
                 shell->comp++;
-                if (!(aux < dados[j]))break; //compara dois valores com distancia h
+                if (aux < dados[j])break; //compara dois valores com distancia h
 
                 dados[j + h] = dados[j]; //Troca os valores
                 shell->trocas++;
@@ -298,16 +298,19 @@ int main(int argc, char** argv) {
                 for (int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = selectionSort(qtd, dadosAux);
+                insereNaLista(lista, alg); //insere na lista
                 break;
             case 'i': //Executa método de ordenação por inserção
                 for (int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = insertionSort(qtd, dadosAux);
+                insereNaLista(lista, alg); //insere na lista
                 break;
             case 'e': //Executa método de ordenação por shellsort
                 for (int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = shellSort(qtd, dadosAux);
+                insereNaLista(lista, alg); //insere na lista
                 break;
             case 'q': //Executa método de ordenação por quicksort
                 for (int i = 0; i < qtd; i++)
@@ -317,16 +320,16 @@ int main(int argc, char** argv) {
                 alg = quickSort(dadosAux, 0, qtd - 1, alg);
                 clock_t fim = clock();                                  //pega o tempo no final da execução do algoritmo
                 alg->tempo = (double) (fim - init) / CLOCKS_PER_SEC;    //calcula o tempo gasto para a execução do algoritmo
+                insereNaLista(lista, alg); //insere na lista
                 break;
             case 'h': //Executa método de ordenação por heapsort
                 for (int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = heapSort(qtd, dadosAux);
+                insereNaLista(lista, alg); //insere na lista
                 break;
             default: //Imprime o codigo de erro do opt
                 printf("getopt retornou com character de codigo 0%o\n", opt);
-            if(opt != '1' && opt != '2' && opt != '3')
-                insereNaLista(lista, alg); //insere na lista
         }
     }
     //////////////////////////////////////////////////////////
@@ -334,7 +337,7 @@ int main(int argc, char** argv) {
     //Impressão////////////
     for (int i = 0; i < 3; i++) {
         if (impressao[i] == Maiores) {//Imprime em tela os T maiores elementos
-            for (int i = (qtd - 1); i >= (qtd - atoi(argv[2])); i--)
+            for (int i = 0; i < (atoi(argv[2])); i++)
                 printf("%d\n", dadosAux[i]);
         } else if (impressao[i] == Estatisticas) {//Imprime as estatísticas
             for (ordenacao* p = lista->ini; p != NULL; p = p->prox) {
