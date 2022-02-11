@@ -5,6 +5,8 @@
 #include "algoritmo.h"
 #include <time.h>
 
+#include "algoritmo.h"
+
 #define Maiores 1
 #define Estatisticas 2
 #define Dados 3
@@ -17,12 +19,12 @@ void insereNaLista(Lista *l, ordenacao *e);
 void excluiLista(Lista *l);
 void imprimir(int *impressao, int t, char* nomeArq, int *dados, int qtd, Lista* lista, FILE* saida);
 
+
 int main(int argc, char** argv) {
     Lista *lista = (Lista*) malloc(sizeof (lista)); //Lista com todas as ordenações executadas
     //Manipulação do arquivo
-    FILE* entrada; //Arquivo de entrada para o sistema
-    FILE* saida; //Arquivo de saida
-
+    FILE* entrada;//Arquivo de entrada para o sistema
+    FILE* saida;//Arquivo de saida
     //Abre o arquivo de Entrada e o de Saida
     entrada = fopen(argv[3], "r+");
     saida = fopen("saida.txt", "a+");
@@ -38,8 +40,8 @@ int main(int argc, char** argv) {
     //Tratamento do dados do arquivo //////////
     int qtd; //quantidade de itens
     fscanf(entrada, "%d", &qtd);
-    int dados[qtd]; //todos os dados do arquivo
-    for (int i = 0; i < qtd; i++)
+    int dados[qtd];//todos os dados do arquivo
+    for(int i = 0; i < qtd; i++)
         fscanf(entrada, "%d", &dados[i]);
     ///////////////////////////////////////////
 
@@ -51,29 +53,29 @@ int main(int argc, char** argv) {
     while ((opt = getopt(argc, argv, "asieqh123")) != -1) {
         switch (opt) {
             case '1': //Adiciona a lista para imprimir em tela os T maiores elementos
-                for (int i = 0; i < 3; i++)
-                    if (impressao[i] == 0) {
+                for(int i = 0; i < 3; i++)
+                    if(impressao[i] == 0){
                         impressao[i] = Maiores;
                         break;
                     }
                 break;
             case '2': //Adiciona a lista para imprimir as estatísticas
-                for (int i = 0; i < 3; i++)
-                    if (impressao[i] == 0) {
+                for(int i = 0; i < 3; i++)
+                    if(impressao[i] == 0){
                         impressao[i] = Estatisticas;
                         break;
                     }
                 break;
             case '3': //Adiciona em lista para imprimir os dados/estatísticas separados por tab
-                for (int i = 0; i < 3; i++)
-                    if (impressao[i] == 0) {
+                for(int i = 0; i < 3; i++)
+                    if(impressao[i] == 0){
                         impressao[i] = Dados;
                         break;
                     }
                 break;
             case 'a': //Executa todos os métodos de ordenação
-                for(int i=0; i<5; i++){
-                    for (int i = 0; i < qtd; i++)
+                for(int i = 0; i < 5; i++){
+                    for(int i = 0; i < qtd; i++)
                         dadosAux[i] = dados[i];
                     switch(i){
                         case 0:
@@ -86,11 +88,12 @@ int main(int argc, char** argv) {
                             alg = shellSort(qtd, dadosAux);
                             break;
                         case 3:
-                            alg = cria("quick");
-                            clock_t init = clock();                                 //pega o tempo atual 
-                            alg = quickSort(dadosAux, 0, qtd - 1, alg);
-                            clock_t fim = clock();                                  //pega o tempo no final da execução do algoritmo
-                            alg->tempo = (double) (fim - init) / CLOCKS_PER_SEC;    //calcula o tempo gasto para a execução do algoritmo
+                            ordenacao *quick = cria("quick");
+                            clock_t init = clock();                             //pega o tempo atual                                        
+                            alg = quickSort(dadosAux, 0, qtd-1, quick);
+                            clock_t fim = clock();                              //pega tempo final da eecução do algoritmo
+                            double tempo = (double)(fim - init)/CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
+                            insereTempo(quick, tempo);
                             break;
                         case 4:
                             alg = heapSort(qtd, dadosAux);
@@ -100,35 +103,35 @@ int main(int argc, char** argv) {
                 }
                 break;
             case 's': //Executa método de ordenação por seleção
-                for (int i = 0; i < qtd; i++)
+                for(int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = selectionSort(qtd, dadosAux);
                 insereNaLista(lista, alg); //insere na lista
                 break;
             case 'i': //Executa método de ordenação por inserção
-                for (int i = 0; i < qtd; i++)
+                for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = insertionSort(qtd, dadosAux);
                 insereNaLista(lista, alg); //insere na lista
                 break;
             case 'e': //Executa método de ordenação por shellsort
-                for (int i = 0; i < qtd; i++)
+                for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = shellSort(qtd, dadosAux);
                 insereNaLista(lista, alg); //insere na lista
                 break;
             case 'q': //Executa método de ordenação por quicksort
-                for (int i = 0; i < qtd; i++)
+                for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = cria("quick");
                 clock_t init = clock();                                 //pega o tempo atual 
                 alg = quickSort(dadosAux, 0, qtd - 1, alg);
                 clock_t fim = clock();                                  //pega o tempo no final da execução do algoritmo
-                alg->tempo = (double) (fim - init) / CLOCKS_PER_SEC;    //calcula o tempo gasto para a execução do algoritmo
+                insereTempo(alg, (double) (fim - init) / CLOCKS_PER_SEC);
                 insereNaLista(lista, alg); //insere na lista
                 break;
             case 'h': //Executa método de ordenação por heapsort
-                for (int i = 0; i < qtd; i++)
+                for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = heapSort(qtd, dadosAux);
                 insereNaLista(lista, alg); //insere na lista
@@ -138,7 +141,6 @@ int main(int argc, char** argv) {
         }
     }
     //////////////////////////////////////////////////////////
-
     //Impressão////////////
     imprimir(impressao, atoi(argv[2]), argv[3], dadosAux, qtd, lista, saida);
     //////////////////////

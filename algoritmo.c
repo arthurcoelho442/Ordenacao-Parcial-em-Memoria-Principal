@@ -1,16 +1,17 @@
-#include "algoritmo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <time.h>
+#include "algoritmo.h"
 
 ordenacao* cria(char *nome){
-    ordenacao* x = (ordenacao*) malloc(sizeof (ordenacao)); //FAZER UMA FUNCAO PARA UTILIZAR EM TODOS OS ALGORITMOS
-    x->algoritmo = (char*) malloc(sizeof (char)*100); //mudar
+    ordenacao* x = (ordenacao*) malloc(sizeof(ordenacao)); //FAZER UMA FUNCAO PARA UTILIZAR EM TODOS OS ALGORITMOS
+    x->algoritmo = (char*) malloc(sizeof(char)*100); 
     strcpy(x->algoritmo, nome);
-    x->comp = 0;
-    x->trocas = 0;
-    x->tempo = 0;
+    insereTroca(x, 0);
+    insereComp(x, 0);
+    insereTempo(x, 0.0);
     x->prox = NULL;
     return x;
 }
@@ -166,6 +167,42 @@ ordenacao* heapSort(int qtd, int *dados) {
     clock_t fim = clock();//pega o tempo no final da execução do algoritmo
     heap->tempo = (double) (fim - init) / CLOCKS_PER_SEC;
     return heap;
+}
+
+void insereProx(ordenacao *x, ordenacao *novo){
+    x->prox = novo;
+}
+
+void insereTempo(ordenacao *x, double tempo){
+    x->tempo = tempo;
+}
+
+double retornaTempo(ordenacao *x){
+    return x->tempo;
+}
+
+void insereTroca(ordenacao *x, unsigned long int trocas){
+    x->trocas = trocas;
+}
+
+unsigned long int retornaTroca(ordenacao *x){
+    return x->trocas;
+}
+
+void insereComp(ordenacao *x, unsigned long int comparacao){
+    x->comp = comparacao;
+}
+
+unsigned long int retornaComp(ordenacao *x){
+    return x->comp;
+}
+
+char* retornaNome(ordenacao *x){
+    return x->algoritmo;
+}
+
+ordenacao* retornaProx(ordenacao *x){
+    return x->prox;
 }
 
 void libera(ordenacao* x){
