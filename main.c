@@ -139,8 +139,8 @@ int main(int argc, char** argv) {
     //Impressão////////////
     for(int i = 0; i < 3; i++){
         if(impressao[i] == Maiores){//Imprime em tela os T maiores elementos
-            for(int i = 0; i < atoi(argv[2]); i++)
-                printf("%d\n", dadosAux[i]);
+            for(int j = 0; j < atoi(argv[2]); j++)
+                printf("%d\n", dadosAux[j]);
         }else if(impressao[i] == Estatisticas){//Imprime as estatísticas
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p)){
                 printf("\nTempo de CPU:\t%lf", retornaTempo(p));
