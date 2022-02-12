@@ -52,7 +52,7 @@ ordenacao*          shellSort(int qtd, long int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          quickSort(long int *dados, long int esq, long int dir, ordenacao* quick);
+ordenacao*          quickSort(long int *dados, int esq, int dir, ordenacao* quick);
 /*
 * Função heapSort:
 * Inputs: Quantidade de dados e base de dados.
