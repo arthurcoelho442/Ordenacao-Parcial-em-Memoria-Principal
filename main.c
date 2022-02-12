@@ -43,10 +43,10 @@ int main(int argc, char** argv) {
     long int *dados = (long int*)malloc(sizeof(long int)*qtd);
     long int *dadosAux = (long int*)malloc(sizeof(long int)*qtd);
     //todos os dados do arquivo
-    for(int i = 0; i < qtd; i++)
+    for(long int i = 0; i < qtd; i++)
         fscanf(entrada, "%ld", &dados[i]);
     ///////////////////////////////////////////
-
+    
     //Analise do [-123iseqha] para definir a execução do programa
     while ((opt = getopt(argc, argv, "asieqh123")) != -1)
         switch (opt) {
@@ -73,8 +73,8 @@ int main(int argc, char** argv) {
                 break;
             case 'a':                                       //Executa todos os métodos de ordenação
                 for(int i = 0; i < 5; i++){
-                    for(int i = 0; i < qtd; i++)
-                        dadosAux[i] = dados[i];
+                    for(int j = 0; j < qtd; j++)
+                        dadosAux[j] = dados[j];
                     switch(i){
                         case 0:
                             alg = selectionSort(qtd, dadosAux);
@@ -151,8 +151,7 @@ int main(int argc, char** argv) {
             }
         }else if(impressao[i] == Dados){//Imprime dados/estatísticas po tab
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p))
-                fprintf(saida, "%s\t%s\t%d\t%s\t%ld\t%ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p),
-                                                                 retornaTroca(p), retornaTempo(p));
+                fprintf(saida, "%s\t%s\t%d\t%s\t%ld\t%ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p), retornaTroca(p), retornaTempo(p));
         }
     }
     //////////////////////
@@ -162,6 +161,9 @@ int main(int argc, char** argv) {
 
     excluiLista(lista);
 
+    free(dados);
+    free(dadosAux);
+    
     return (EXIT_SUCCESS);
 }
 

@@ -113,24 +113,24 @@ ordenacao*          shellSort(int qtd, long int *dados) {
     shell->tempo = (double) (fim - init) / CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
     return shell;
 }
-ordenacao*          quickSort(long int *dados, int esq, int dir, ordenacao* quick) {
-    int aux_esq = esq;
-    int aux_dir = dir;
-    int temp = dados[aux_esq];
+ordenacao*          quickSort(long int *dados, long int esq, long int dir, ordenacao* quick) {
+    long int aux_esq = esq;
+    long int aux_dir = dir;
+    long int temp = dados[aux_esq];
 
     if(esq < dir){
         while(aux_esq < aux_dir) {
-            while(dados[aux_dir] <= temp){
+            while(aux_esq < aux_dir){
                 quick->comp++;
-                if(! (aux_esq < aux_dir ))
+                if(! (dados[aux_dir] <= temp))
                     break;
                 aux_dir--;
             }
             if(dados[aux_esq] != dados[aux_dir]){
                 dados[aux_esq] = dados[aux_dir];
-                while(dados[aux_esq] >= temp) {
+                while(aux_esq < aux_dir) {
                     quick->comp++;
-                    if(!(aux_esq < aux_dir))
+                    if(!(dados[aux_esq] >= temp))
                         break;
                     aux_esq++;
                 }
