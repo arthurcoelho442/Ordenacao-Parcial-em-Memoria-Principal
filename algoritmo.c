@@ -97,7 +97,7 @@ ordenacao*          shellSort(int qtd, long int *dados) {
             j = i - h;
             while (1) {
                 shell->comp++;
-                if (aux < dados[j])break; //compara dois valores com distancia h
+                if (aux <= dados[j])break; //compara dois valores com distancia h
 
                 dados[j + h] = dados[j]; //Troca os valores
                 shell->trocas++;
