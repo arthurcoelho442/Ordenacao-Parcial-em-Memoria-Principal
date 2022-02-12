@@ -109,23 +109,23 @@ ordenacao* quickSort(int *dados, int esq, int dir, ordenacao *quick){
     if(esq < dir){
         while(aux_esq < aux_dir) {
             while(dados[aux_dir] <= temp  && aux_esq < aux_dir ){
+                quick->comp++;
                 aux_dir--;
             }
-        
-            printf("%d <-> %d\t %d,%d\n", dados[aux_esq], dados[aux_dir], aux_esq, aux_dir);
-            dados[aux_esq] = dados[aux_dir];
-            while(dados[aux_esq] >= temp  && aux_esq < aux_dir ){
-                aux_esq++;
+            if(dados[aux_esq] != dados[aux_dir]){
+                dados[aux_esq] = dados[aux_dir];
+                while(dados[aux_esq] >= temp  && aux_esq < aux_dir ){
+                    quick->comp++;
+                    aux_esq++;
+                }
+                dados[aux_dir] = dados[aux_esq];
+                quick->trocas++;
             }
-            dados[aux_dir] = dados[aux_esq];
-            quick->trocas++;
         }
         dados[aux_esq] = temp;
         quickSort(dados, esq, aux_esq -1, quick);
         quickSort(dados, aux_dir +1, dir, quick);
     }
-
-    return quick;
     
     return quick;
 }
