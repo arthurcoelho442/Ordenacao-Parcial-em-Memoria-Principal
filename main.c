@@ -17,8 +17,6 @@ typedef struct lista {
 
 void insereNaLista(Lista *l, ordenacao *e);
 void excluiLista(Lista *l);
-void imprimir(int *impressao, int t, char* nomeArq, int *dados, int qtd, Lista* lista, FILE* saida);
-
 
 int main(int argc, char** argv) {
     Lista *lista = (Lista*) malloc(sizeof (lista));         //Lista com todas as ordenações executadas
@@ -139,7 +137,22 @@ int main(int argc, char** argv) {
         }
     //////////////////////////////////////////////////////////
     //Impressão////////////
-    imprimir(impressao, atoi(argv[2]), argv[3], dadosAux, qtd, lista, saida);
+    for(int i = 0; i < 3; i++){
+        if(impressao[i] == Maiores){//Imprime em tela os T maiores elementos
+            for(int i = 0; i < atoi(argv[2]); i++)
+                printf("%d\n", dadosAux[i]);
+        }else if(impressao[i] == Estatisticas){//Imprime as estatísticas
+            for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p)){
+                printf("\nTempo de CPU:\t%lf", retornaTempo(p));
+                printf("\nComparações:\t%ld", retornaComp(p));
+                printf("\nTrocas:\t%ld\n", retornaTroca(p));
+            }
+        }else if(impressao[i] == Dados){//Imprime dados/estatísticas po tab
+            for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p))
+                fprintf(saida, "%s\t%s\t%d\t%s\t%ld\t%ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p),
+                                                                 retornaTroca(p), retornaTempo(p));
+        }
+    }
     //////////////////////
     
     fclose(entrada);
@@ -172,22 +185,4 @@ void excluiLista(Lista *l) {
     }
     
     free(l); //Libera a lista
-}
-
-void imprimir(int *impressao, int t, char* nomeArq, int *dados, int qtd, Lista* lista, FILE* saida){
-    for (int i = 0; i < 3; i++) {
-        if (impressao[i] == Maiores) {//Imprime em tela os T maiores elementos
-            for (int j = 0; j < t; j++)
-                printf("%d\n", dados[j]);
-        }else if (impressao[i] == Estatisticas) {//Imprime as estatísticas
-            for (ordenacao* p = lista->ini; p != NULL; p = p->prox) {
-                printf("\nTempo de CPU:\t%lf", p->tempo);
-                printf("\nComparações:\t%ld", p->comp);
-                printf("\nTrocas:\t%ld\n", p->trocas);
-            }
-        }else if (impressao[i] == Dados) {//Imprime dados/estatísticas po tab
-            for (ordenacao* p = lista->ini; p != NULL; p = p->prox)
-                fprintf(saida, "%s\t%s\t%d\t%d\t%ld\t%ld\t%lf\n", p->algoritmo, nomeArq, qtd, t, p->comp, p->trocas, p->tempo);
-        }
-    }
 }
