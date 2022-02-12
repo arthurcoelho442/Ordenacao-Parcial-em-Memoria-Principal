@@ -40,11 +40,13 @@ int main(int argc, char** argv) {
     //Tratamento do dados do arquivo //////////
     int qtd;                                                //quantidade de itens
     fscanf(entrada, "%d", &qtd);
-    long int dados[qtd], dadosAux[qtd];                          //todos os dados do arquivo
-    for(int i = 0; i < qtd; i++)
+    long int *dados = (long int*)malloc(sizeof(long int)*qtd);
+    long int *dadosAux = (long int*)malloc(sizeof(long int)*qtd);
+    //todos os dados do arquivo
+    for(long int i = 0; i < qtd; i++)
         fscanf(entrada, "%ld", &dados[i]);
     ///////////////////////////////////////////
-
+    
     //Analise do [-123iseqha] para definir a execução do programa
     while ((opt = getopt(argc, argv, "asieqh123")) != -1)
         switch (opt) {
@@ -159,6 +161,9 @@ int main(int argc, char** argv) {
 
     excluiLista(lista);
 
+    free(dados);
+    free(dadosAux);
+    
     return (EXIT_SUCCESS);
 }
 
