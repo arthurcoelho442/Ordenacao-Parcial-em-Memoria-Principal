@@ -21,23 +21,22 @@ void                criaHeap(long int *dados, int inicio, int fim, ordenacao *he
 
     while (filho <= fim) {
         if (filho < fim && (filho + 1) < fim) {
-            if (dados[filho] < dados[filho + 1]) { //pai tem 2 filhos ? se sim, qual o maior
+            heap->comp++;
+            if (dados[filho] < dados[filho + 1]) //pai tem 2 filhos ? se sim, qual o maior
                 filho++;
-                heap->comp++;
-            }
         }
+        heap->comp++;
         if (aux < dados[filho]) { //troca o filho com o pai se o filho for maior
             dados[inicio] = dados[filho];
             inicio = filho;
             filho = 2 * inicio + 1;
             heap->trocas++;
-            heap->comp++;
         } else {
             filho = fim + 1;
         }
     }
     dados[inicio] = aux; //pai troca com filho mais profundo mais a direita
-    heap->trocas++;
+    //heap->trocas++;
 }
 
 ordenacao*          selectionSort(int qtd, long int *dados) {
@@ -120,14 +119,19 @@ ordenacao*          quickSort(long int *dados, long int esq, long int dir, orden
     long int central = dados[(esq + dir) / 2];
     
     while (aux_esq <= aux_dir) {
-        while (dados[aux_esq] < central && aux_esq < dir) {
-            aux_esq++;
+        while (aux_esq < dir) {
             quick->comp++;
+            if(!(dados[aux_esq] < central))
+                break;
+            aux_esq++;            
         }
-        while (dados[aux_dir] > central && aux_dir > esq) {
+        while (aux_dir > esq) {
+            quick->comp++;
+            if(!(dados[aux_dir] > central))
+                break;
             aux_dir--;
-            quick->comp++;
         }
+        quick->comp++;
         if (aux_esq <= aux_dir) {
             //TROCA DE POSIÇÃO
             long int aux_troca = dados[aux_esq];
@@ -137,7 +141,6 @@ ordenacao*          quickSort(long int *dados, long int esq, long int dir, orden
             aux_dir--;
             quick->trocas++;
         }
-        quick->comp++;
     }
     if (aux_dir > esq)
         quickSort(dados, esq, aux_dir, quick);
