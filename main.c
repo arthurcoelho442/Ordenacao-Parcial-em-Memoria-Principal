@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "algoritmo.h"
 #include <time.h>
 
 #include "algoritmo.h"
@@ -10,36 +11,21 @@
 #define Estatisticas 2
 #define Dados 3
 
-typedef struct lista{
+typedef struct lista {
     ordenacao *ini, *fim;
-}Lista;
+} Lista;
 
-//Insere os dados de uma ordenação na lista
-
-void insereNaLista(Lista *l, ordenacao *e) {
-    //Entra se a lista esta vazia e adiciona os dados
-    if (l->ini == NULL) {
-        l->ini = e;
-        l->fim = e;
-    }else{//Entra se a lista já possui elementos e adiciona na ultima posição
-        insereProx(l->fim, e);
-        l->fim = e; 
-    }
-}
-
-//Libera o espaço da alocação dinamica 
-void excluiLista(Lista *l){
-    //Anda pela fila liberando algoritmo por algoritmo
-    excluiOrdenacao(l->ini);
-    free(l);//Libera a lista
-}
-
+void insereNaLista(Lista *l, ordenacao *e);
+void excluiLista(Lista *l);
 
 int main(int argc, char** argv) {
-    Lista *lista = (Lista*) malloc(sizeof (lista)); //Lista com todas as ordenações executadas
-    //Manipulação do arquivo
-    FILE* entrada;//Arquivo de entrada para o sistema
-    FILE* saida;//Arquivo de saida
+    Lista *lista = (Lista*) malloc(sizeof (lista));         //Lista com todas as ordenações executadas
+    FILE* entrada;                                          //Arquivo de entrada para o sistema
+    FILE* saida;                                            //Arquivo de saida
+    int opt;
+    int impressao[3] = {0, 0, 0};
+    ordenacao *alg;                                         //algoritimo de ordenação
+    
     //Abre o arquivo de Entrada e o de Saida
     entrada = fopen(argv[3], "r+");
     saida = fopen("saida.txt", "a+");
@@ -50,44 +36,40 @@ int main(int argc, char** argv) {
         return 0;
     }
     ///////////////////////////////////////
-    
-    //Tratamento do dados do arquivo 
-    int qtd; //quantidade de itens
+
+    //Tratamento do dados do arquivo //////////
+    int qtd;                                                //quantidade de itens
     fscanf(entrada, "%d", &qtd);
-    int dados[qtd];//todos os dados do arquivo
+    int dados[qtd], dadosAux[qtd];                          //todos os dados do arquivo
     for(int i = 0; i < qtd; i++)
         fscanf(entrada, "%d", &dados[i]);
-    ///////////////////////////////
+    ///////////////////////////////////////////
 
     //Analise do [-123iseqha] para definir a execução do programa
-    int opt;
-    int impressao[3] = {0, 0, 0};
-    int dadosAux[qtd];
-    ordenacao *alg; //algoritimo de ordenação
-    while ((opt = getopt(argc, argv, "asieqh123")) != -1) {
+    while ((opt = getopt(argc, argv, "asieqh123")) != -1)
         switch (opt) {
-            case '1': //Adiciona a lista para imprimir em tela os T maiores elementos
+            case '1':                                       //Adiciona a lista para imprimir em tela os T maiores elementos
                 for(int i = 0; i < 3; i++)
                     if(impressao[i] == 0){
                         impressao[i] = Maiores;
                         break;
                     }
                 break;
-            case '2': //Adiciona a lista para imprimir as estatísticas
+            case '2':                                       //Adiciona a lista para imprimir as estatísticas
                 for(int i = 0; i < 3; i++)
                     if(impressao[i] == 0){
                         impressao[i] = Estatisticas;
                         break;
                     }
                 break;
-            case '3': //Adiciona em lista para imprimir os dados/estatísticas separados por tab
+            case '3':                                       //Adiciona em lista para imprimir os dados/estatísticas separados por tab
                 for(int i = 0; i < 3; i++)
                     if(impressao[i] == 0){
                         impressao[i] = Dados;
                         break;
                     }
                 break;
-            case 'a': //Executa todos os métodos de ordenação
+            case 'a':                                       //Executa todos os métodos de ordenação
                 for(int i = 0; i < 5; i++){
                     for(int i = 0; i < qtd; i++)
                         dadosAux[i] = dados[i];
@@ -102,12 +84,12 @@ int main(int argc, char** argv) {
                             alg = shellSort(qtd, dadosAux);
                             break;
                         case 3:
-                            ordenacao *quick = cria("quick");
+                            alg = cria("quick");
                             clock_t init = clock();                             //pega o tempo atual                                        
-                            alg = quickSort(dadosAux, 0, qtd-1, quick);
+                            alg = quickSort(dadosAux, 0, qtd-1, alg);
                             clock_t fim = clock();                              //pega tempo final da eecução do algoritmo
                             double tempo = (double)(fim - init)/CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
-                            insereTempo(quick, tempo);
+                            insereTempo(alg, tempo);
                             break;
                         case 4:
                             alg = heapSort(qtd, dadosAux);
@@ -116,45 +98,43 @@ int main(int argc, char** argv) {
                     insereNaLista(lista, alg);
                 }
                 break;
-            case 's': //Executa método de ordenação por seleção
+            case 's':                                       //Executa método de ordenação por seleção
                 for(int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = selectionSort(qtd, dadosAux);
-                insereNaLista(lista, alg);
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'i': //Executa método de ordenação por inserção
+            case 'i':                                       //Executa método de ordenação por inserção
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = insertionSort(qtd, dadosAux);
-                insereNaLista(lista, alg);
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'e': //Executa método de ordenação por shellsort
+            case 'e':                                       //Executa método de ordenação por shellsort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = shellSort(qtd, dadosAux);
-                insereNaLista(lista, alg);
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'q': //Executa método de ordenação por quicksort
+            case 'q':                                       //Executa método de ordenação por quicksort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
-                ordenacao *quick = cria("quick");
-                clock_t init = clock();                             //pega o tempo atual                                        
-                alg = quickSort(dadosAux, 0, qtd-1, quick);
-                clock_t fim = clock();                              //pega tempo final da eecução do algoritmo
-                double tempo = (double)(fim - init)/CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
-                insereTempo(quick, tempo);
-                insereNaLista(lista, alg);
+                alg = cria("quick");
+                clock_t init = clock();                     //pega o tempo atual 
+                alg = quickSort(dadosAux, 0, qtd - 1, alg);
+                clock_t fim = clock();                      //pega o tempo no final da execução do algoritmo
+                insereTempo(alg, (double) (fim - init) / CLOCKS_PER_SEC);
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'h': //Executa método de ordenação por heapsort
+            case 'h':                                       //Executa método de ordenação por heapsort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = heapSort(qtd, dadosAux);
-                insereNaLista(lista, alg);
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            default: //Imprime o codigo de erro do opt
-                printf ("getopt retornou com character de codigo 0%o\n", opt);
+            default:                                        //Imprime o codigo de erro do opt
+                printf("getopt retornou com character de codigo 0%o\n", opt);
         }
-    }
     //////////////////////////////////////////////////////////
     //Impressão////////////
     for(int i = 0; i < 3; i++){
@@ -181,4 +161,28 @@ int main(int argc, char** argv) {
     excluiLista(lista);
 
     return (EXIT_SUCCESS);
+}
+
+//Insere os dados de uma ordenação na lista
+void insereNaLista(Lista *l, ordenacao *e) {
+    //Entra se a lista esta vazia e adiciona os dados
+    if (l->ini == NULL) {
+        l->ini = e;
+        l->fim = e;
+    } else {//Entra se a lista já possui elementos e adiciona na ultima posição
+        l->fim->prox = e;
+        l->fim = e;
+    }
+}
+
+//Libera o espaço da alocação dinamica 
+void excluiLista(Lista *l) {
+    //Anda pela fila leberando algoritmo por algoritmo
+    for (ordenacao *p = l->ini; p != NULL;){
+        ordenacao* t = p->prox;
+        libera(p);
+        p = t;
+    }
+    
+    free(l); //Libera a lista
 }
