@@ -104,34 +104,28 @@ ordenacao* shellSort(int qtd, int *dados){
 ordenacao* quickSort(int *dados, int esq, int dir, ordenacao *quick){
     int aux_esq = esq;
     int aux_dir = dir;
-    int central = dados[(esq + dir) / 2];
-     
-    while(aux_esq <= aux_dir) {
-        while(dados[aux_esq] > central && aux_esq <= dir) {
-            aux_esq++;
-            quick->comp++;
-        }
-        while(dados[aux_dir] < central && aux_dir >= esq) {
-            aux_dir--;
-            quick->comp++;
-        }
-        if(aux_esq < aux_dir && dados[aux_esq] < dados[aux_dir]) {
-            //TROCA DE POSIÇÃO
-            printf("%d %d %d %d %d\n", aux_esq, esq, aux_dir, dir, central);
-            int aux_troca = dados[aux_esq];
+    int temp = dados[aux_esq];
+
+    if(esq < dir){
+        while(aux_esq < aux_dir) {
+            while(dados[aux_dir] <= temp  && aux_esq < aux_dir ){
+                aux_dir--;
+            }
+        
+            printf("%d <-> %d\t %d,%d\n", dados[aux_esq], dados[aux_dir], aux_esq, aux_dir);
             dados[aux_esq] = dados[aux_dir];
-            dados[aux_dir] = aux_troca;
+            while(dados[aux_esq] >= temp  && aux_esq < aux_dir ){
+                aux_esq++;
+            }
+            dados[aux_dir] = dados[aux_esq];
             quick->trocas++;
         }
-        aux_esq++;
-        aux_dir--;
-    }     
-    if(aux_dir > esq) {
-        quickSort(dados, esq, aux_dir, quick);
+        dados[aux_esq] = temp;
+        quickSort(dados, esq, aux_esq -1, quick);
+        quickSort(dados, aux_dir +1, dir, quick);
     }
-    if(aux_esq < dir) {
-        quickSort(dados, aux_esq, dir, quick);
-    }
+
+    return quick;
     
     return quick;
 }
