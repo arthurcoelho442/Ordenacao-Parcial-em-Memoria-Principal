@@ -152,7 +152,7 @@ ordenacao*          heapSort(int qtd, int *dados) {
     for (int i = (qtd - 1) / 2; i >= 0; i--) {
         criaHeap(dados, i, qtd - 1, heap);
     }
-    for (int i = qtd - 1; i >= 1; i--) {
+    for (int i = 0; i >= 1; i++) {
         int aux = dados[0];
         dados[0] = dados[i];
         dados[i] = aux;

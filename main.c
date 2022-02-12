@@ -21,12 +21,12 @@ void imprimir(int *impressao, int t, char* nomeArq, int *dados, int qtd, Lista* 
 
 
 int main(int argc, char** argv) {
-    Lista *lista = (Lista*) malloc(sizeof (lista)); //Lista com todas as ordenações executadas
-    FILE* entrada;//Arquivo de entrada para o sistema
-    FILE* saida;//Arquivo de saida
+    Lista *lista = (Lista*) malloc(sizeof (lista));         //Lista com todas as ordenações executadas
+    FILE* entrada;                                          //Arquivo de entrada para o sistema
+    FILE* saida;                                            //Arquivo de saida
     int opt;
     int impressao[3] = {0, 0, 0};
-    ordenacao *alg; //algoritimo de ordenação
+    ordenacao *alg;                                         //algoritimo de ordenação
     
     //Abre o arquivo de Entrada e o de Saida
     entrada = fopen(argv[3], "r+");
@@ -40,9 +40,9 @@ int main(int argc, char** argv) {
     ///////////////////////////////////////
 
     //Tratamento do dados do arquivo //////////
-    int qtd; //quantidade de itens
+    int qtd;                                                //quantidade de itens
     fscanf(entrada, "%d", &qtd);
-    int dados[qtd], dadosAux[qtd];//todos os dados do arquivo
+    int dados[qtd], dadosAux[qtd];                          //todos os dados do arquivo
     for(int i = 0; i < qtd; i++)
         fscanf(entrada, "%d", &dados[i]);
     ///////////////////////////////////////////
@@ -50,28 +50,28 @@ int main(int argc, char** argv) {
     //Analise do [-123iseqha] para definir a execução do programa
     while ((opt = getopt(argc, argv, "asieqh123")) != -1)
         switch (opt) {
-            case '1': //Adiciona a lista para imprimir em tela os T maiores elementos
+            case '1':                                       //Adiciona a lista para imprimir em tela os T maiores elementos
                 for(int i = 0; i < 3; i++)
                     if(impressao[i] == 0){
                         impressao[i] = Maiores;
                         break;
                     }
                 break;
-            case '2': //Adiciona a lista para imprimir as estatísticas
+            case '2':                                       //Adiciona a lista para imprimir as estatísticas
                 for(int i = 0; i < 3; i++)
                     if(impressao[i] == 0){
                         impressao[i] = Estatisticas;
                         break;
                     }
                 break;
-            case '3': //Adiciona em lista para imprimir os dados/estatísticas separados por tab
+            case '3':                                       //Adiciona em lista para imprimir os dados/estatísticas separados por tab
                 for(int i = 0; i < 3; i++)
                     if(impressao[i] == 0){
                         impressao[i] = Dados;
                         break;
                     }
                 break;
-            case 'a': //Executa todos os métodos de ordenação
+            case 'a':                                       //Executa todos os métodos de ordenação
                 for(int i = 0; i < 5; i++){
                     for(int i = 0; i < qtd; i++)
                         dadosAux[i] = dados[i];
@@ -100,41 +100,41 @@ int main(int argc, char** argv) {
                     insereNaLista(lista, alg);
                 }
                 break;
-            case 's': //Executa método de ordenação por seleção
+            case 's':                                       //Executa método de ordenação por seleção
                 for(int i = 0; i < qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = selectionSort(qtd, dadosAux);
-                insereNaLista(lista, alg); //insere na lista
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'i': //Executa método de ordenação por inserção
+            case 'i':                                       //Executa método de ordenação por inserção
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = insertionSort(qtd, dadosAux);
-                insereNaLista(lista, alg); //insere na lista
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'e': //Executa método de ordenação por shellsort
+            case 'e':                                       //Executa método de ordenação por shellsort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = shellSort(qtd, dadosAux);
-                insereNaLista(lista, alg); //insere na lista
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'q': //Executa método de ordenação por quicksort
+            case 'q':                                       //Executa método de ordenação por quicksort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = cria("quick");
-                clock_t init = clock();                                 //pega o tempo atual 
+                clock_t init = clock();                     //pega o tempo atual 
                 alg = quickSort(dadosAux, 0, qtd - 1, alg);
-                clock_t fim = clock();                                  //pega o tempo no final da execução do algoritmo
+                clock_t fim = clock();                      //pega o tempo no final da execução do algoritmo
                 insereTempo(alg, (double) (fim - init) / CLOCKS_PER_SEC);
-                insereNaLista(lista, alg); //insere na lista
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            case 'h': //Executa método de ordenação por heapsort
+            case 'h':                                       //Executa método de ordenação por heapsort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
                 alg = heapSort(qtd, dadosAux);
-                insereNaLista(lista, alg); //insere na lista
+                insereNaLista(lista, alg);                  //insere na lista
                 break;
-            default: //Imprime o codigo de erro do opt
+            default:                                        //Imprime o codigo de erro do opt
                 printf("getopt retornou com character de codigo 0%o\n", opt);
         }
     //////////////////////////////////////////////////////////
