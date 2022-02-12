@@ -16,7 +16,7 @@ ordenacao*          cria(char *nome){
     return x;
 }
 void                criaHeap(long int *dados, int inicio, int fim, ordenacao *heap) {
-    long int aux = dados[inicio]; //pai
+    int aux = dados[inicio]; //pai
     int filho = 2 * inicio + 1; //filho
 
     while (filho <= fim) {
@@ -113,39 +113,36 @@ ordenacao*          shellSort(int qtd, long int *dados) {
     shell->tempo = (double) (fim - init) / CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
     return shell;
 }
-ordenacao*          quickSort(long int *dados, long int esq, long int dir, ordenacao* quick) {
-    long int aux_esq = esq;
-    long int aux_dir = dir;
-    long int central = dados[(esq + dir) / 2];
-    
-    while (aux_esq <= aux_dir) {
-        while (aux_esq < dir) {
-            quick->comp++;
-            if(!(dados[aux_esq] < central))
-                break;
-            aux_esq++;            
+ordenacao*          quickSort(long int *dados, int esq, int dir, ordenacao* quick) {
+    int aux_esq = esq;
+    int aux_dir = dir;
+    int temp = dados[aux_esq];
+
+    if(esq < dir){
+        while(aux_esq < aux_dir) {
+            while(dados[aux_dir] <= temp){
+                quick->comp++;
+                if(! (aux_esq < aux_dir ))
+                    break;
+                aux_dir--;
+            }
+            if(dados[aux_esq] != dados[aux_dir]){
+                dados[aux_esq] = dados[aux_dir];
+                while(dados[aux_esq] >= temp) {
+                    quick->comp++;
+                    if(!(aux_esq < aux_dir))
+                        break;
+                    aux_esq++;
+                }
+                dados[aux_dir] = dados[aux_esq];
+                quick->trocas++;
+            }
         }
-        while (aux_dir > esq) {
-            quick->comp++;
-            if(!(dados[aux_dir] > central))
-                break;
-            aux_dir--;
-        }
-        quick->comp++;
-        if (aux_esq <= aux_dir) {
-            //TROCA DE POSIÇÃO
-            long int aux_troca = dados[aux_esq];
-            dados[aux_esq] = dados[aux_dir];
-            dados[aux_dir] = aux_troca;
-            aux_esq++;
-            aux_dir--;
-            quick->trocas++;
-        }
+        dados[aux_esq] = temp;
+        quickSort(dados, esq, aux_esq -1, quick);
+        quickSort(dados, aux_dir +1, dir, quick);
     }
-    if (aux_dir > esq)
-        quickSort(dados, esq, aux_dir, quick);
-    if (aux_esq < dir)
-        quickSort(dados, aux_esq, dir, quick);
+    
     return quick;
 }
 ordenacao*          heapSort(int qtd, long int *dados) {
@@ -156,7 +153,7 @@ ordenacao*          heapSort(int qtd, long int *dados) {
         criaHeap(dados, i, qtd - 1, heap);
     }
     for (int i = 0; i >= 1; i++) {
-        long int aux = dados[0];
+        int aux = dados[0];
         dados[0] = dados[i];
         dados[i] = aux;
         heap->trocas++;
