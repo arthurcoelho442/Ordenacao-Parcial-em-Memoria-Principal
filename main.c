@@ -40,9 +40,9 @@ int main(int argc, char** argv) {
     //Tratamento do dados do arquivo //////////
     int qtd;                                                //quantidade de itens
     fscanf(entrada, "%d", &qtd);
-    int dados[qtd], dadosAux[qtd];                          //todos os dados do arquivo
+    long int dados[qtd], dadosAux[qtd];                          //todos os dados do arquivo
     for(int i = 0; i < qtd; i++)
-        fscanf(entrada, "%d", &dados[i]);
+        fscanf(entrada, "%ld", &dados[i]);
     ///////////////////////////////////////////
 
     //Analise do [-123iseqha] para definir a execução do programa
@@ -71,8 +71,8 @@ int main(int argc, char** argv) {
                 break;
             case 'a':                                       //Executa todos os métodos de ordenação
                 for(int i = 0; i < 5; i++){
-                    for(int i = 0; i < qtd; i++)
-                        dadosAux[i] = dados[i];
+                    for(int j = 0; j < qtd; j++)
+                        dadosAux[j] = dados[j];
                     switch(i){
                         case 0:
                             alg = selectionSort(qtd, dadosAux);
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
     for(int i = 0; i < 3; i++){
         if(impressao[i] == Maiores){//Imprime em tela os T maiores elementos
             for(int j = 0; j < atoi(argv[2]); j++)
-                printf("%d\n", dadosAux[j]);
+                printf("%ld\n", dadosAux[j]);
         }else if(impressao[i] == Estatisticas){//Imprime as estatísticas
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p)){
                 printf("\nTempo de CPU:\t%lf", retornaTempo(p));
@@ -149,8 +149,7 @@ int main(int argc, char** argv) {
             }
         }else if(impressao[i] == Dados){//Imprime dados/estatísticas po tab
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p))
-                fprintf(saida, "%s\t%s\t%d\t%s\t%ld\t%ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p),
-                                                                 retornaTroca(p), retornaTempo(p));
+                fprintf(saida, "%s\t%s\t%d\t%s\t%ld\t%ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p), retornaTroca(p), retornaTempo(p));
         }
     }
     //////////////////////

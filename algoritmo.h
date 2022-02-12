@@ -28,7 +28,7 @@ ordenacao*          cria(char *nome);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          selectionSort(int qtd, int *dados);
+ordenacao*          selectionSort(int qtd, long int *dados);
 /*
 * Função insertionSort:
 * Inputs: Quantidade de dados e base de dados.
@@ -36,7 +36,7 @@ ordenacao*          selectionSort(int qtd, int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          insertionSort(int qtd, int *dados);
+ordenacao*          insertionSort(int qtd, long int *dados);
 /*
 * Função shellSort:
 * Inputs: Quantidade de dados e base de dados.
@@ -44,7 +44,7 @@ ordenacao*          insertionSort(int qtd, int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          shellSort(int qtd, int *dados);
+ordenacao*          shellSort(int qtd, long int *dados);
 /*
 * Função quickSort:
 * Inputs: /------/.
@@ -52,7 +52,7 @@ ordenacao*          shellSort(int qtd, int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          quickSort(int *dados, int esq, int dir, ordenacao* quick);
+ordenacao*          quickSort(long int *dados, long int esq, long int dir, ordenacao* quick);
 /*
 * Função heapSort:
 * Inputs: Quantidade de dados e base de dados.
@@ -60,7 +60,7 @@ ordenacao*          quickSort(int *dados, int esq, int dir, ordenacao* quick);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          heapSort(int qtd, int *dados);
+ordenacao*          heapSort(int qtd, long int *dados);
 
 /*
 * Função insereProx:
