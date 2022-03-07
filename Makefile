@@ -15,3 +15,5 @@ compile-run:
 valgrind:
 	make compile
 	valgrind ./a.out entrada_teste.txt
+
+#Finalizado

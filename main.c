@@ -203,3 +203,4 @@ void excluiLista(Lista *l) {
     
     free(l); //Libera a lista
 }
+//Finalizado

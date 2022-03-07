@@ -146,3 +146,4 @@ ordenacao*          retornaProx(ordenacao *x);
 void                libera(ordenacao* x);
 
 #endif /* ALGORITMO_H */
+//Finalizado

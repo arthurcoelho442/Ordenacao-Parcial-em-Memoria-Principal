@@ -198,3 +198,4 @@ void                libera(ordenacao* x){
     free(x->algoritmo); //Libera o nome do algoritmo utilizado
     free(x); //Libera os dados do algoritmo
 }
+//Finalizado
