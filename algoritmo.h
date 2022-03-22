@@ -19,7 +19,7 @@ typedef struct ordenacao ordenacao;
 * Pre-Condicao: Nome diferente de null.
 * Pos-Condicao: Nenhum.
 */
-ordenacao*          cria(char *nome);
+ordenacao* cria(char *nome);
 
 /*
 * Função selectionSort:
@@ -28,7 +28,7 @@ ordenacao*          cria(char *nome);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          selectionSort(int qtd, long int *dados);
+ordenacao* selectionSort(int qtd, long int *dados, int top);
 /*
 * Função insertionSort:
 * Inputs: Quantidade de dados e base de dados.
@@ -36,7 +36,7 @@ ordenacao*          selectionSort(int qtd, long int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          insertionSort(int qtd, long int *dados);
+ordenacao* insertionSort(int qtd, long int *dados, int top);
 /*
 * Função shellSort:
 * Inputs: Quantidade de dados e base de dados.
@@ -44,7 +44,7 @@ ordenacao*          insertionSort(int qtd, long int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          shellSort(int qtd, long int *dados);
+ordenacao* shellSort(int qtd, long int *dados, int top);
 /*
 * Função quickSort:
 * Inputs: /------/.
@@ -52,7 +52,7 @@ ordenacao*          shellSort(int qtd, long int *dados);
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          quickSort(long int *dados, long int esq, long int dir, ordenacao* quick);
+ordenacao* quickSort(long int *dados, long int esq, long int dir, ordenacao* quick, int top);
 /*
 * Função heapSort:
 * Inputs: Quantidade de dados e base de dados.
@@ -60,7 +60,7 @@ ordenacao*          quickSort(long int *dados, long int esq, long int dir, orden
 * Pre-Condicao: Nenhuma.
 * Pos-Condicao: Retornar um ponteiro de ordenação alocado dinamicamente.
 */
-ordenacao*          heapSort(int qtd, long int *dados);
+ordenacao* heapSort(int qtd, long int *dados, int top);
 
 /*
 * Função insereProx:
@@ -69,7 +69,7 @@ ordenacao*          heapSort(int qtd, long int *dados);
 * Pre-Condicao: Algoritmo principal e próximo existentes e já alocados.
 * Pos-Condicao: Nenhum
 */
-void                insereProx(ordenacao *x, ordenacao *novo);
+void insereProx(ordenacao *x, ordenacao *novo);
 /*
 * Função insereTempo:
 * Inputs: Algoritmo de ordenação principal, tempo gasto no algoritmo.
@@ -77,7 +77,7 @@ void                insereProx(ordenacao *x, ordenacao *novo);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-void                insereTempo(ordenacao *x, double tempo);
+void insereTempo(ordenacao *x, double tempo);
 /*
 * Função insereTroca:
 * Inputs: Algoritmo de ordenação principal, numero de trocas feitas no algoritmo.
@@ -85,7 +85,7 @@ void                insereTempo(ordenacao *x, double tempo);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-void                insereTroca(ordenacao *x, unsigned long int trocas);
+void insereTroca(ordenacao *x, unsigned long int trocas);
 /*
 * Função insereComp:
 * Inputs: Algoritmo de ordenação principal, numero de comparações feitas no algoritmo.
@@ -93,7 +93,7 @@ void                insereTroca(ordenacao *x, unsigned long int trocas);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-void                insereComp(ordenacao *x, unsigned long int comparacao);
+void insereComp(ordenacao *x, unsigned long int comparacao);
 
 /*
 * Função retornaTempo:
@@ -102,7 +102,7 @@ void                insereComp(ordenacao *x, unsigned long int comparacao);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-double              retornaTempo(ordenacao *x);
+double retornaTempo(ordenacao *x);
 /*
 * Função retornaTroca:
 * Inputs: Algoritmo de ordenação principal.
@@ -110,7 +110,7 @@ double              retornaTempo(ordenacao *x);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-unsigned long int   retornaTroca(ordenacao *x);
+unsigned long int retornaTroca(ordenacao *x);
 /*
 * Função retornaComp:
 * Inputs: Algoritmo de ordenação principal.
@@ -118,7 +118,7 @@ unsigned long int   retornaTroca(ordenacao *x);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-unsigned long int   retornaComp(ordenacao *x);
+unsigned long int retornaComp(ordenacao *x);
 /*
 * Função retornaNome:
 * Inputs: Algoritmo de ordenação principal.
@@ -126,7 +126,7 @@ unsigned long int   retornaComp(ordenacao *x);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-char*               retornaNome(ordenacao *x);
+char* retornaNome(ordenacao *x);
 /*
 * Função retornaProx:
 * Inputs: Algoritmo de ordenação principal.
@@ -134,7 +134,7 @@ char*               retornaNome(ordenacao *x);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Nenhum
 */
-ordenacao*          retornaProx(ordenacao *x);
+ordenacao* retornaProx(ordenacao *x);
 
 /*
 * Função libera:
@@ -143,7 +143,6 @@ ordenacao*          retornaProx(ordenacao *x);
 * Pre-Condicao: Algoritmo principal existente e já alocado.
 * Pos-Condicao: Algoritmo é liberado
 */
-void                libera(ordenacao* x);
+void libera(ordenacao* x);
 
 #endif /* ALGORITMO_H */
-//Finalizado
