@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     int opt;
     int impressao[3] = {0, 0, 0};
     ordenacao *alg;                                         //algoritimo de ordenação
+    int top = atoi(argv[2]);
     
     //Abre o arquivo de Entrada e o de Saida
     entrada = fopen(argv[3], "r+");
@@ -38,12 +39,10 @@ int main(int argc, char** argv) {
     ///////////////////////////////////////
 
     //Tratamento do dados do arquivo //////////
-    int qtd, k=0;                                                //quantidade de itens
+    int qtd;                                                //quantidade de itens
     fscanf(entrada, "%d", &qtd);
     long int *dados = (long int*)malloc(sizeof(long int)*qtd);
-    long int **dadosAux = (long int**)malloc(sizeof(long int*)*5);
-    for(int i=0;i<5;i++)
-        dadosAux[i]=(long int*)malloc(sizeof(long int)*qtd);
+    long int *dadosAux = (long int*)malloc(sizeof(long int)*qtd);
     //todos os dados do arquivo
     for(long int i = 0; i < qtd; i++)
         fscanf(entrada, "%ld", &dados[i]);
@@ -76,71 +75,65 @@ int main(int argc, char** argv) {
             case 'a':                                       //Executa todos os métodos de ordenação
                 for(int i = 0; i < 5; i++){
                     for(int j = 0; j < qtd; j++)
-                        dadosAux[k][j] = dados[j];
+                        dadosAux[j] = dados[j];
                     switch(i){
                         case 0:
-                            alg = selectionSort(qtd, dadosAux[k]);
+                            alg = selectionSort(qtd, dadosAux, top);
                             break;
                         case 1:
-                            alg = insertionSort(qtd, dadosAux[k]);
+                            alg = insertionSort(qtd, dadosAux, top);
                             break;
                         case 2:
-                            alg = shellSort(qtd, dadosAux[k]);
+                            alg = shellSort(qtd, dadosAux, top);
                             break;
                         case 3:
                             alg = cria("quick");
                             clock_t init = clock();                             //pega o tempo atual                                        
-                            alg = quickSort(dadosAux[k], 0, qtd-1, alg);
+                            alg = quickSort(dadosAux, 0, qtd-1, alg, top);
                             clock_t fim = clock();                              //pega tempo final da eecução do algoritmo
                             double tempo = (double)(fim - init)/CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
                             insereTempo(alg, tempo);
                             break;
                         case 4:
-                            alg = heapSort(qtd, dadosAux[k]);
+                            alg = heapSort(qtd, dadosAux, top);
                             break;
                     }
                     insereNaLista(lista, alg);
-                    k++;
                 }
                 break;
             case 's':                                       //Executa método de ordenação por seleção
                 for(int i = 0; i < qtd; i++)
-                    dadosAux[k][i] = dados[i];
-                alg = selectionSort(qtd, dadosAux[k]);
+                    dadosAux[i] = dados[i];
+                alg = selectionSort(qtd, dadosAux, top);
                 insereNaLista(lista, alg);                  //insere na lista
-                k++;
                 break;
             case 'i':                                       //Executa método de ordenação por inserção
                 for(int i=0; i<qtd; i++)
-                    dadosAux[k][i] = dados[i];
-                alg = insertionSort(qtd, dadosAux[k]);
+                    dadosAux[i] = dados[i];
+                alg = insertionSort(qtd, dadosAux, top);
                 insereNaLista(lista, alg);                  //insere na lista
-                k++;
                 break;
             case 'e':                                       //Executa método de ordenação por shellsort
                 for(int i=0; i<qtd; i++)
-                    dadosAux[k][i] = dados[i];
-                alg = shellSort(qtd, dadosAux[k]);
+                    dadosAux[i] = dados[i];
+                alg = shellSort(qtd, dadosAux, top);
                 insereNaLista(lista, alg);                  //insere na lista
-                k++;
                 break;
             case 'q':                                       //Executa método de ordenação por quicksort
                 for(int i=0; i<qtd; i++)
-                    dadosAux[k][i] = dados[i];
+                    dadosAux[i] = dados[i];
                 alg = cria("quick");
                 clock_t init = clock();                     //pega o tempo atual 
-                alg = quickSort(dadosAux[k], 0, qtd - 1, alg);
+                alg = quickSort(dadosAux, 0, qtd - 1, alg, top);
                 clock_t fim = clock();                      //pega o tempo no final da execução do algoritmo
                 insereTempo(alg, (double) (fim - init) / CLOCKS_PER_SEC);
                 insereNaLista(lista, alg);                  //insere na lista
-                k++;
                 break;
             case 'h':                                       //Executa método de ordenação por heapsort
                 for(int i=0; i<qtd; i++)
-                    dadosAux[k][i] = dados[i];
-                alg = heapSort(qtd, dadosAux[k]);
+                    dadosAux[i] = dados[i];
+                alg = heapSort(qtd, dadosAux, top);
                 insereNaLista(lista, alg);                  //insere na lista
-                k++;
                 break;
             default:                                        //Imprime o codigo de erro do opt
                 printf("getopt retornou com character de codigo 0%o\n", opt);
@@ -149,11 +142,8 @@ int main(int argc, char** argv) {
     //Impressão////////////
     for(int i = 0; i < 3; i++){
         if(impressao[i] == Maiores){//Imprime em tela os T maiores elementos
-            for(int j=0; j<k; j++){
-                printf("\n");
-                for(int aux = 0; aux < atoi(argv[2]); aux++)
-                    printf("%ld\n", dadosAux[j][aux]);
-            }
+            for(int j = 0; j < atoi(argv[2]); j++)
+                printf("%ld\n", dadosAux[j]);
         }else if(impressao[i] == Estatisticas){//Imprime as estatísticas
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p)){
                 printf("\nTempo de CPU:\t%lf", retornaTempo(p));
@@ -173,8 +163,6 @@ int main(int argc, char** argv) {
     excluiLista(lista);
 
     free(dados);
-    for(int i=0; i < 5 ; i++)
-        free(dadosAux[i]);
     free(dadosAux);
     
     return (EXIT_SUCCESS);
@@ -203,4 +191,3 @@ void excluiLista(Lista *l) {
     
     free(l); //Libera a lista
 }
-//Finalizado
