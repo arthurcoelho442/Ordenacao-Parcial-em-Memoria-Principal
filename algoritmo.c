@@ -44,11 +44,11 @@ ordenacao* selectionSort(int qtd, long int *dados, int top) {
     clock_t init = clock(); //pega o tempo atual 
 
     for (int i = 0; i < top; i++) {
-        int max_id = i; //armazena o indice do valor minimo
+        int max_id = i; //armazena o indice do valor maximo
         for (int j = i; j < qtd; j++) {//Anda pela sublista
             selec->comp++;
             if (dados[j] > dados[max_id])//Verifica se um dos dados da sublista e menor do que o dado do indice min_id
-                max_id = j; //troca o indice do valor minimo
+                max_id = j; //troca o indice do valor maximo
         }
         if (dados[i] < dados[max_id]) {//Faz a troca dos dados do indice min_id da sublista com o dado na posição i
             selec->trocas++;
@@ -112,6 +112,8 @@ ordenacao* shellSort(int qtd, long int *dados, int top) {
                 if (j < 0) break;
             }
             dados[j + h] = aux;
+            if(h==1 && top == i)
+                break;
         }
     }
 
@@ -120,36 +122,60 @@ ordenacao* shellSort(int qtd, long int *dados, int top) {
     return shell;
 }
 
-ordenacao* quickSort(long int *dados, long int esq, long int dir, ordenacao* quick, int top) {
-    long int aux_esq = esq;
-    long int aux_dir = dir;
-    long int temp = dados[aux_esq];
-
-    if(esq < dir){
-        while(aux_esq < aux_dir) {
-            while(aux_esq < aux_dir){
-                quick->comp++;
-                if(! (dados[aux_dir] <= temp))
-                    break;
-                aux_dir--;
-            }
-            if(dados[aux_esq] != dados[aux_dir]){
-                dados[aux_esq] = dados[aux_dir];
-                while(aux_esq < aux_dir) {
-                    quick->comp++;
-                    if(!(dados[aux_esq] >= temp))
-                        break;
-                    aux_esq++;
-                }
-                dados[aux_dir] = dados[aux_esq];
-                quick->trocas++;
-            }
+void Particao(long int Esq, long int Dir, long int *i, long int *j, long int *dados, ordenacao* quick) {
+    long int x, w;
+    *i = Esq;
+    *j = Dir;
+    x = dados[(*i + *j) / 2]; /* obtem o pivo x */
+    do {
+        quick->comp++;
+        while (x < dados[*i]) {
+            quick->comp++;
+            (*i)++;
         }
-        dados[aux_esq] = temp;
-        quickSort(dados, esq, aux_esq -1, quick, top);
-        quickSort(dados, aux_dir +1, dir, quick, top);
-    }
+        quick->comp++;
+        while (x > dados[*j]){
+            quick->comp++;
+            (*j)--;
+        }
+        if (*i <= *j) {
+            quick->trocas++;
+            w = dados[*i];
+            dados[*i] = dados[*j];
+            dados[*j] = w;
+            (*i)++;
+            (*j)--;
+        }
+    } while (*i <= *j);
+}
+
+void Ordena(long int Esq, long int Dir, long int *dados, int top, int* retorno, ordenacao* quick) {
+    long int i, j;
     
+    if(*retorno)
+        return;
+    
+    Particao(Esq, Dir, &i, &j, dados, quick);
+    
+    if((Esq >= j && Esq >= top-1) || *retorno){
+        *retorno = 1;
+        return;
+    }
+    if (Esq < j) Ordena(Esq, j, dados, top, retorno, quick);
+    if (i < Dir) Ordena(i, Dir, dados, top, retorno, quick);
+    
+}
+
+ordenacao* quickSort(long int *dados, int n, int top) {
+    ordenacao* quick = cria("quick");
+    clock_t init = clock(); //pega o tempo atual 
+    
+    int retorno = 0;
+    Ordena(0, n-1, dados, top, &retorno, quick);
+    
+    clock_t fim = clock(); //pega o tempo no final da execução do algoritmo
+    
+    quick->tempo = (double) (fim - init) / CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
     return quick;
 }
 

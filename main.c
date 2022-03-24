@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     
     //Abre o arquivo de Entrada e o de Saida
     entrada = fopen(argv[3], "r+");
-    saida = fopen("saida.txt", "a+");
+    saida = fopen("ED2_Trab1_results.txt", "a+");
 
     //Verifica se o arquivo de Entrada é existente
     if (entrada == NULL) {
@@ -88,11 +88,8 @@ int main(int argc, char** argv) {
                             break;
                         case 3:
                             alg = cria("quick");
-                            clock_t init = clock();                             //pega o tempo atual                                        
-                            alg = quickSort(dadosAux, 0, qtd-1, alg, top);
-                            clock_t fim = clock();                              //pega tempo final da eecução do algoritmo
-                            double tempo = (double)(fim - init)/CLOCKS_PER_SEC; //calcula o tempo gasto para a execução do algoritmo
-                            insereTempo(alg, tempo);
+                            alg = quickSort(dadosAux, qtd, top);
+                            insereNaLista(lista, alg);                  //insere na lista
                             break;
                         case 4:
                             alg = heapSort(qtd, dadosAux, top);
@@ -122,16 +119,13 @@ int main(int argc, char** argv) {
             case 'q':                                       //Executa método de ordenação por quicksort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
-                alg = cria("quick");
-                clock_t init = clock();                     //pega o tempo atual 
-                alg = quickSort(dadosAux, 0, qtd - 1, alg, top);
-                clock_t fim = clock();                      //pega o tempo no final da execução do algoritmo
-                insereTempo(alg, (double) (fim - init) / CLOCKS_PER_SEC);
+                alg = quickSort(dadosAux, qtd, top);
                 insereNaLista(lista, alg);                  //insere na lista
                 break;
             case 'h':                                       //Executa método de ordenação por heapsort
                 for(int i=0; i<qtd; i++)
                     dadosAux[i] = dados[i];
+                
                 alg = heapSort(qtd, dadosAux, top);
                 insereNaLista(lista, alg);                  //insere na lista
                 break;
@@ -151,8 +145,21 @@ int main(int argc, char** argv) {
                 printf("\nTrocas:\t%ld\n", retornaTroca(p));
             }
         }else if(impressao[i] == Dados){//Imprime dados/estatísticas po tab
+            for(int i=0;i<strlen(argv[3])+94;i++)
+                fprintf(saida, "-");
+            fprintf(saida, "\n\t\t\t\t\t\t Dados Estatisticos\n");
+            fprintf(saida, " Algoritmo\tArquivo");
+            for(int i=0;i<strlen(argv[3])-7;i++)
+                fprintf(saida, " ");
+            fprintf(saida, "\t   Tam.\t   Top\t\t   Comp.\t   Trocas\t Tempo (s)\n");
+            for(int i=0;i<strlen(argv[3])+94;i++)
+                fprintf(saida, "-");
+            fprintf(saida, "\n");
             for(ordenacao *p = lista->ini; p!=NULL; p = retornaProx(p))
-                fprintf(saida, "%s\t%s\t%d\t%s\t%ld\t%ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p), retornaTroca(p), retornaTempo(p));
+                fprintf(saida, "%8s\t%s\t%7d\t%7s\t%8ld\t%8ld\t%lf\n", retornaNome(p), argv[3], qtd, argv[2],  retornaComp(p), retornaTroca(p), retornaTempo(p));
+            for(int i=0;i<strlen(argv[3])+94;i++)
+                fprintf(saida, "-");
+            fprintf(saida, "\n");
         }
     }
     //////////////////////
