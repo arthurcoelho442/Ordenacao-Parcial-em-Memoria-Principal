@@ -15,7 +15,7 @@ ordenacao* cria(char *nome){
     x->prox = NULL;
     return x;
 }
-void criaHeap(long int *dados, int inicio, int fim, ordenacao *heap) {
+/* void criaHeap(long int *dados, int inicio, int fim, ordenacao *heap) {
     int aux = dados[inicio]; //pai
     int filho = 2 * inicio + 1; //filho
 
@@ -37,7 +37,7 @@ void criaHeap(long int *dados, int inicio, int fim, ordenacao *heap) {
     }
     dados[inicio] = aux; //pai troca com filho mais profundo mais a direita
     //heap->trocas++;
-}
+} */
 
 ordenacao* selectionSort(int qtd, long int *dados, int top) {
     ordenacao* selec = cria("selecao");
@@ -179,7 +179,7 @@ ordenacao* quickSort(long int *dados, int n, int top) {
     return quick;
 }
 
-ordenacao* heapSort(int qtd, long int *dados, int top ) {
+/* ordenacao* heapSort(int qtd, long int *dados, int top ) {
     ordenacao* heap = cria("heap");
     clock_t init = clock();//pega o tempo atual 
 
@@ -196,6 +196,51 @@ ordenacao* heapSort(int qtd, long int *dados, int top ) {
     
     clock_t fim = clock();//pega o tempo no final da execução do algoritmo
     heap->tempo = (double) (fim - init) / CLOCKS_PER_SEC;
+    return heap;
+} */
+
+void refazHeap(int esq, int dir, long int *dados, ordenacao* heap){
+    long int i = esq;
+    long int j;
+    long int x;
+    j = 2 * i;
+    x = dados[i];
+    while (j <= dir){
+        if(j < dir){
+            if(dados[j] < dados[j+1])
+                j++;
+        }
+        if(x >= dados[j])
+            break;
+        dados[i] = dados[j];
+        i = j;
+        j = 2 * i;
+    }
+    dados[i] = x;    
+}
+
+void criaHeap(long int *dados, int qtd, ordenacao* heap){
+    long int esq = qtd/2 +1;
+    while(esq > 1){
+        esq--;
+        refazHeap(esq, qtd, dados, heap);
+    }
+}
+
+ordenacao* heapSort(int qtd, long int *dados, int top){
+    ordenacao* heap = cria("heap");
+    long int esq, dir;
+    criaHeap(dados, qtd-1, heap);
+    esq = 0;
+    dir = qtd-1;
+    while(dir > 1){
+        int x = dados[1];
+        dados[1] = dados[dir];
+        dados[dir] = x;
+        dir--;
+        heap->trocas++;
+        refazHeap(esq, dir, dados, heap);
+    }
     return heap;
 }
 
