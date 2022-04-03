@@ -35,6 +35,6 @@ para [-123iseqha] temos as seguintes parâmetros:
 
 - (3) imprime dados/estatísticas separados por tab: 
 	
-	###[algoritmo	arquivo	tam.	T(top)	comp. 	trocas	tempo(s)]
+	### [algoritmo	arquivo	tam.	T(top)	comp. 	trocas	tempo(s)]
 	
 	seleção	./in/5.txt	5	5	x	y	0.00001
