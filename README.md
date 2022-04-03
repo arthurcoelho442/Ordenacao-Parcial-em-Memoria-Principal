@@ -26,10 +26,15 @@ para [-123iseqha] temos as seguintes parâmetros:
 	100
 
 - (2) imprime estatísticas: 
+	
 	Tempo de CPU: 	0.0001 segundos.
-  Comparações:		300         	
-  Trocas:		200
+  	
+	Comparações:	300         	
+  
+  	Trocas:		200
 
 - (3) imprime dados/estatísticas separados por tab: 
+	
 	[algoritmo	arquivo	tam.	T(top)	comp. 	trocas	tempo(s)]
+	
 	seleção	./in/5.txt	5	5	x	y	0.00001
