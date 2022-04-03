@@ -12,11 +12,17 @@ para [-123iseqha] temos as seguintes parâmetros:
 -	(q) Executa método de ordenação por quicksort
 -	(h) Executa método de ordenação por heapsort 
 -	(1) imprime em tela os T maiores elementos:
+	
 	Exemplo: Top 5 para entrada [100,300,400,200,500,50,1,10]
+	
 	500
+	
 	400
+	
 	300
+	
 	200
+	
 	100
 
 - (2) imprime estatísticas: 
